@@ -1,14 +1,14 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import ToDoList, Item
+from .models import Employee, Car, Order, Services, Detail
 from .forms import CreateNewList
+
 
 
 def index(response, id):
     ls = ToDoList.objects.get(id=id)
-
     if ls in response.user.todolist.all():
-
         if response.method == 'POST':
             print(response.POST)
             if response.POST.get('save'):
@@ -28,10 +28,6 @@ def index(response, id):
     return render(response, 'main/view.html', {})
 
 
-def home(response):
-    return render(response, 'main/home.html', {})
-
-
 def create(response):
     if response.method == 'POST':
         form = CreateNewList(response.POST)
@@ -47,5 +43,31 @@ def create(response):
     return render(response, 'main/create.html', {"form": form})
 
 
+def home(response):
+    return render(response, 'main/main.html', {})
+
+
+def workers(response):
+    people = Employee.objects.all()
+    people = [elem for elem in people] * 5
+    return render(response, 'main/workers.html', {'workers': people})
+
+
+def service(response):
+    things = Detail.objects.all()
+    things = [elem for elem in things] * 5
+    return render(response, 'main/service.html', {'workers': things})
+
+
+def orders(response):
+    return render(response, 'main/orders.html', {})
+
+
+def cars(response):
+    autos = Car.objects.all()
+    autos = [elem for elem in autos] * 5
+    return render(response, 'main/cars.html', {'cars':autos})
+
+
 def view(response):
-    return render(response, 'main/view.html',{})
+    return render(response, 'main/view.html', {})

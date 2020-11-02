@@ -1,5 +1,41 @@
-{% extends 'base.html' %}
+{% extends 'main/base.html' %}
 
 {% block content %}
-Hello world
+
+
+<div container>
+    <div class='row'>
+    {% for worker in workers%}
+        
+            <div class="col-lg-3 col-md-3 mb-4">
+                <div class="card h-100">
+                    <a href="#"><img class="card-img-top" src="../media/{{car.photo}}" alt=""></a>
+                    <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="#">{{worker.surname}} {{worker.name}}</a>
+                    </h4>
+                    <h5>{{worker.type}}, рейтинг <small class="text-muted">{{worker.rating}}&#9733;</small></h5>
+                    <p class="card-text">Возраст: {{worker.age}} лет</p>
+                    <p>Стаж: {{worker.exp}} лет</p>
+                    <p>{{worker.text}}</p>
+                    <span>{{worker.phone}}</span>
+                    </div>
+                    
+                    <div class="card-footer">
+                    {% if worker.status%}
+                    <div class="alert alert-danger" role="alert">
+                    Выполняет заказ
+                    {% else %}
+                          <div class="alert alert-success" role="alert">
+                    Свободен для заказа
+                    {% endif %}
+                    </div>
+                    </div>
+                </div>
+            </div>
+        
+{%endfor%}
+</div>
+</div>
 {% endblock content %}
+    
