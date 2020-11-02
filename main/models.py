@@ -30,29 +30,31 @@ class Car(models.Model):
     owner = models.ForeignKey(Employee, on_delete=models.CASCADE, verbose_name="Прикрепленный водитель", blank=True,
                               null=True)
     picture = models.ImageField(default='', upload_to="mysite/cars/", verbose_name="Фото")
+
     def __str__(self):
         return self.maker
 
 
 class Order(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name="Авто")
-    driver = models.ForeignKey(Employee, on_delete=models.CASCADE, verbose_name="Водитель", blank=True)
+    driver = models.ForeignKey(Employee, on_delete=models.CASCADE, verbose_name="Водитель", blank=True, null=True)
     date = models.DateTimeField(verbose_name="Дата заказа")
     text = models.CharField(max_length=300, verbose_name="Комментарий")
     complete = models.BooleanField(verbose_name="Статус")
 
     def __str__(self):
-        return self.driver
+        return self.text
 
 
 class Services(models.Model):
-    car = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name="Автомобиль")
+    name = models.CharField(max_length=300, verbose_name="Наименование работ")
+    vehicle = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name="Автомобиль")
     date = models.DateTimeField(verbose_name="Время начала работ")
     text = models.CharField(max_length=300, verbose_name="Комментарий")
     complete = models.BooleanField(default=False, verbose_name="Статус")
 
     def __str__(self):
-        return self.car
+        return self.vehicle.model
 
 
 class Detail(models.Model):

@@ -1,5 +1,30 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-Заказы
+
+
+<div class='container'>
+    <div class='row'>
+    {% for item in orders %}
+        <div class="col-lg-3 col-md-3 mb-4">
+        {% if item.complete%}
+            <div class="card text-white bg-success mb-3" style=" height: 15rem;">
+           <p class="text-center">Выполнена</p>
+            {% else %}
+            <div class="card text-white bg-warning mb-3" style=" height: 15rem;">
+           <p class="text-center">В процессе</p>
+            {% endif %}
+            <div class="card-header">{{item.text}}</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{item.car.maker}} {{item.car.model}}</h5>
+                    <p class="card-text">{{item.date}}</p>
+                    {% if item.driver.name%} <p>Водитель: {{item.driver.surname}} {{item.driver.name}}</p> {%else%}<p></p>{% endif %}
+                </div>    
+            </div>
+            </div>
+        
+{%endfor%}
+</div>
+</div>
 {% endblock content %}
+    

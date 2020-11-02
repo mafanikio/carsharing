@@ -1,46 +1,5 @@
-from django.shortcuts import render
-from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
 from .models import Employee, Car, Order, Services, Detail
-from .forms import CreateNewList
-
-
-
-def index(response, id):
-    ls = ToDoList.objects.get(id=id)
-    if ls in response.user.todolist.all():
-        if response.method == 'POST':
-            print(response.POST)
-            if response.POST.get('save'):
-                for item in ls.item_set.all():
-                    if response.POST.get(f'c{item.id}') == 'clicked':
-                        item.complete = True
-                    else:
-                        item.complete = False
-                    item.save()
-            elif response.POST.get('newItem'):
-                txt = response.POST.get('new')
-                if len(txt) > 2:
-                    ls.item_set.create(text=txt, complete=False)
-                else:
-                    print('Invalid')
-        return render(response, 'main/list.html', {"ls": ls})
-    return render(response, 'main/view.html', {})
-
-
-def create(response):
-    if response.method == 'POST':
-        form = CreateNewList(response.POST)
-
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            t = ToDoList(name=name)
-            t.save()
-            response.user.todolist.add(t)
-            return HttpResponseRedirect(f'/{t.id}')
-    else:
-        form = CreateNewList()
-    return render(response, 'main/create.html', {"form": form})
 
 
 def home(response):
@@ -54,20 +13,42 @@ def workers(response):
 
 
 def service(response):
-    things = Detail.objects.all()
+    things = Services.objects.all()
     things = [elem for elem in things] * 5
-    return render(response, 'main/service.html', {'workers': things})
+    return render(response, 'main/service.html', {'things': things})
 
 
 def orders(response):
-    return render(response, 'main/orders.html', {})
+    orders = Order.objects.all()
+    orders = [elem for elem in orders] * 5
+    return render(response, 'main/orders.html', {'orders': orders})
 
 
 def cars(response):
     autos = Car.objects.all()
     autos = [elem for elem in autos] * 5
-    return render(response, 'main/cars.html', {'cars':autos})
+    return render(response, 'main/cars.html', {'cars': autos})
 
 
 def view(response):
     return render(response, 'main/view.html', {})
+
+
+def search(response):
+    if response.method == 'POST':
+        year = response.POST.get('caryear', 0)
+        type = response.POST.get('selector', 0)
+        maker = response.POST.get('carmaker', 0)
+        model = response.POST.get('carmodel', 0)
+        if int(type) == 1:
+            tp = 'Легковые'
+        elif int(type) == 2:
+            tp = 'Автобусы'
+        elif int(type) == 3:
+            tp = 'Грузовые'
+        else:
+            tp = 0
+        sort = Car.objects.get(maker=maker, type=tp)
+        return render(response, 'main/cars.html', {'cars': [sort]})
+    else:
+        return render(response, 'main/search.html', {})

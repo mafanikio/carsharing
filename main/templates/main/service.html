@@ -1,5 +1,19 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-Сервис
+<div class='container'>
+    <div class='row'>
+        {% for item in things %}
+            {%if item.complete%} <div class="card border-success m-4" style=" height: 15rem;width: 15rem;"> {%else%} <div class="card border-light m-4" style=" height: 15rem;width: 15rem;"> {%endif%}
+                <div class="card-header">{{item.name}}</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{item.vehicle.maker}} {{item.vehicle.model}}</h5>
+                        <p class="card-text">{{item.text}}</p>
+                    </div>
+                      <div class="card-footer bg-transparent border-success">{{item.date}}</div>
+                </div>
+               
+        {% endfor %}
+    </div>
+</div>
 {% endblock content %}
