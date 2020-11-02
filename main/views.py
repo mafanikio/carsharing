@@ -34,6 +34,7 @@ def view(response):
     return render(response, 'main/view.html', {})
 
 
+
 def search(response):
     if response.method == 'POST':
         year = response.POST.get('caryear', 0)
