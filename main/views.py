@@ -34,9 +34,9 @@ def view(response):
     return render(response, 'main/view.html', {})
 
 
-
 def search(response):
     if response.method == 'POST':
+        kwargs = dict()
         year = response.POST.get('caryear', 0)
         type = response.POST.get('selector', 0)
         maker = response.POST.get('carmaker', 0)
@@ -49,7 +49,10 @@ def search(response):
             tp = 'Грузовые'
         else:
             tp = 0
-        sort = Car.objects.get(maker=maker, type=tp)
+        if model: kwargs['model'] = model
+        if maker: kwargs['maker'] = maker
+        if tp: kwargs['type'] = tp
+        sort = Car.objects.get(**kwargs)
         return render(response, 'main/cars.html', {'cars': [sort]})
     else:
         return render(response, 'main/search.html', {})
