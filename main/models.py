@@ -63,5 +63,6 @@ class Detail(models.Model):
     price = models.IntegerField(default=0, verbose_name="Цена")
     stock = models.IntegerField(default=True, verbose_name="Штук в наличии")
 
+
     def __str__(self):
         return self.name
